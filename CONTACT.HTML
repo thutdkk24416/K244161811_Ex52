@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 3px solid rgb(179, 31, 31);
+            padding-bottom: 10px;
+        }
+        .info-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid rgb(179, 31, 31);
+        }
+        .label {
+            font-weight: bold;
+            color: #555;
+            margin-top: 10px;
+        }
+        .value {
+            color: #333;
+            padding: 8px 0;
+            word-break: break-word;
+        }
+        .error {
+            color: rgb(179, 31, 31);
+            font-weight: bold;
+        }
+        .button-group {
+            margin-top: 30px;
+            text-align: center;
+        }
+        button {
+            background-color: rgb(179, 31, 31);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #a01f1f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Contact Form Submission</h2>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            
+            if (queryString) {
+                const pairs = queryString.split('&');
+                pairs.forEach(pair => {
+                    const [key, value] = pair.split('=');
+                    params[key] = decodeURIComponent(value || '');
+                });
+            }
+            return params;
+        }
+
+        // Display the received data
+        function displayData() {
+            const params = getUrlParams();
+            const resultDiv = document.getElementById('result');
+            
+            if (Object.keys(params).length === 0) {
+                resultDiv.innerHTML = '<p class="error">No data received. Please fill out the contact form.</p>';
+                return;
+            }
+
+            const fullname = params.fullname || 'Not provided';
+            const email = params.email || 'Not provided';
+            const sento = params.sento || 'Not specified';
+            const title = params.title || 'Not provided';
+            const content = params.content || 'Not provided';
+
+            // Map select value to display name
+            const sendToNames = {
+                'editorial': 'Editorial board',
+                'news': 'News Department',
+                'perspectives': 'Board of Perspectives',
+                'world': 'World Board',
+                'business': 'Business Department'
+            };
+
+            resultDiv.innerHTML = `
+                <p style="color: green; font-size: 18px;"><strong>✓ Thank you! Your message has been received.</strong></p>
+                
+                <div class="info-box">
+                    <div class="label">Full Name:</div>
+                    <div class="value">${fullname}</div>
+                    
+                    <div class="label">Email:</div>
+                    <div class="value">${email}</div>
+                    
+                    <div class="label">Send to:</div>
+                    <div class="value">${sendToNames[sento] || sento}</div>
+                    
+                    <div class="label">Title:</div>
+                    <div class="value">${title}</div>
+                    
+                    <div class="label">Content:</div>
+                    <div class="value" style="white-space: pre-wrap;">${content}</div>
+                </div>
+                
+                <p style="color: #666; margin-top: 20px;">
+                    We have received your message and will get back to you soon.
+                </p>
+                
+                <div class="button-group">
+                    <button onclick="history.back()">Go Back</button>
+                    <button onclick="window.location.href='contactpage.html'">Send Another Message</button>
+                </div>
+            `;
+        }
+
+        // Run when page loads
+        window.addEventListener('load', displayData);
+    </script>
+</body>
+</html>
